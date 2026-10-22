@@ -48,7 +48,7 @@
       background: linear-gradient(135deg, #006e68, #008c88 55%, #004e4b);
     }
     .hero::before {
-      content: ""; position: absolute; inset: 0; z-index: -2;
+      content: ""; position: absolute; inset: 0; z-index: 0;
       background:
         linear-gradient(115deg, rgba(0, 74, 70, .82), rgba(0, 140, 136, .68) 52%, rgba(0, 61, 58, .78)),
         url("assets/college-background.jpg") center/cover no-repeat;
@@ -58,7 +58,12 @@
       content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
       background: radial-gradient(ellipse at center, rgba(0,0,0,.04), rgba(0,0,0,.22));
     }
-    .hero-content { max-width: 1050px; animation: rise-in .9s ease both; }
+    .hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1050px;
+  animation: rise-in .9s ease both;
+}
     .eyebrow { margin: 0 0 22px; font-size: .76rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.85); }
     h1 { margin: 0; font-family: "Manrope", sans-serif; font-size: clamp(2.3rem, 6.4vw, 5.7rem); font-weight: 800; line-height: 1.04; letter-spacing: -.055em; text-wrap: balance; }
     h1 span { display: block; margin-top: 14px; font-size: clamp(1.05rem, 2.3vw, 1.8rem); font-weight: 600; line-height: 1.4; letter-spacing: .12em; }
