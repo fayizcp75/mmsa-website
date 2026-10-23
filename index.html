@@ -158,6 +158,25 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
     }
+
+    #adminDashboard{display:none;position:fixed;inset:0;z-index:1200;overflow:auto;background:#f4f7f8;color:#172a2a;padding:28px 18px 40px}
+    #adminDashboard.visible{display:block}
+    .admin-dash-wrap{max-width:980px;margin:0 auto}
+    .admin-dash-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+    .admin-dash-top h2{margin:0;font-size:clamp(24px,4vw,34px)}
+    .admin-dash-top p{margin:6px 0 0;color:#607171}
+    .admin-dash-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .admin-dash-btn{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;background:#0e7773;color:white}
+    .admin-dash-btn.secondary{background:white;color:#254343;border:1px solid #d7e1e1}
+    .admin-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+    .admin-project-card{background:white;border:1px solid #e0e8e8;border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(20,50,50,.05)}
+    .admin-project-icon{width:46px;height:46px;border-radius:12px;background:#e8f5f3;display:grid;place-items:center;font-size:23px;margin-bottom:16px}
+    .admin-project-card h3{margin:0 0 8px;font-size:19px}
+    .admin-project-card p{color:#607171;line-height:1.55;min-height:48px;margin:0 0 18px;font-size:14px}
+    .admin-project-card .status{display:inline-block;border-radius:30px;background:#e8f7ed;color:#267345;padding:5px 9px;font-size:12px;font-weight:700;margin-bottom:12px}
+    .admin-dash-foot{margin-top:22px;color:#718080;font-size:12px;line-height:1.5}
+    @media(max-width:520px){#adminDashboard{padding:20px 13px}.admin-dash-top{align-items:flex-start;flex-direction:column}}
+
   </style>
 </head>
 <body>
@@ -311,6 +330,21 @@
     </form>
   </div>
 
+  <section id="adminDashboard" aria-label="MMSA Admin Project Control">
+    <div class="admin-dash-wrap">
+      <header class="admin-dash-top">
+        <div><p class="section-kicker">MMSA ADMIN</p><h2>Project Control</h2><p>Manage the website project and its backend tools.</p></div>
+        <div class="admin-dash-actions"><button class="admin-dash-btn secondary" id="backToWebsite" type="button">View Website</button><button class="admin-dash-btn" id="adminLogout" type="button">Log out</button></div>
+      </header>
+      <div class="admin-project-grid">
+        <article class="admin-project-card"><div class="admin-project-icon">🌐</div><span class="status">Hosting</span><h3>Vercel Project</h3><p>Open your hosting dashboard to inspect deployments, domain settings, and project configuration.</p><a class="admin-dash-btn" href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer">Open Vercel ↗</a></article>
+        <article class="admin-project-card"><div class="admin-project-icon">🗄️</div><span class="status">Backend</span><h3>Supabase Project</h3><p>Open the MMSA backend to manage authentication, database settings, and project health.</p><a class="admin-dash-btn" href="https://supabase.com/dashboard/project/tqxflzkppzolxehpkmto" target="_blank" rel="noopener noreferrer">Open Supabase ↗</a></article>
+        <article class="admin-project-card"><div class="admin-project-icon">💻</div><span class="status">Source code</span><h3>GitHub Repository</h3><p>Open the website source code to review files, commit changes, and manage the repository.</p><a class="admin-dash-btn" href="https://github.com/fayizcp75/mmsa-website" target="_blank" rel="noopener noreferrer">Open GitHub ↗</a></article>
+      </div>
+      <p class="admin-dash-foot">These cards open the official control panels. They do not directly change hosting or database settings from this page. Access to each service depends on your account permissions.</p>
+    </div>
+  </section>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const menuOverlay = document.getElementById('menuOverlay');
@@ -332,6 +366,7 @@
     const noticeMessage = document.getElementById('noticeMessage');
     const adminLoginForm = document.getElementById('adminLoginForm');
     const adminSubmit = document.getElementById('adminSubmit');
+    const adminDashboard = document.getElementById('adminDashboard');
 
     // Supabase project public/publishable key. Never place a service_role key in frontend code.
     const SUPABASE_URL = 'https://tqxflzkppzolxehpkmto.supabase.co';
@@ -390,12 +425,26 @@
           return;
         }
 
-        noticeMessage.textContent = 'Admin authentication successful. The admin dashboard has not been added yet.';
+        loginNotice.classList.remove('show');
+        adminDashboard.classList.add('visible');
+        document.body.style.overflow = 'hidden';
       } catch (error) {
         noticeMessage.textContent = 'Login failed. Check your email and password, and confirm the Supabase admin account is configured.';
       } finally {
         adminSubmit.disabled = false;
       }
+    });
+
+    document.getElementById('backToWebsite').addEventListener('click', () => {
+      adminDashboard.classList.remove('visible');
+      document.body.style.overflow = '';
+    });
+    document.getElementById('adminLogout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      adminDashboard.classList.remove('visible');
+      document.body.style.overflow = '';
+      showAdminLogin();
+      noticeMessage.textContent = 'You have been logged out.';
     });
 
     const observer = new IntersectionObserver(entries => {
