@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#008C88" />
+  <meta name="description" content="MMSA — Masrahul Mawahib Students Association" />
+  <title>MMSA | Masrahul Mawahib Students Association</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #008C88;
+      --teal-dark: #006D69;
+      --teal-deep: #004E4B;
+      --ink: #111817;
+      --muted: #5B6866;
+      --paper: #FFFFFF;
+      --soft: #F2F6F5;
+      --line: #DDE8E6;
+      --radius: 22px;
+      --shadow: 0 18px 55px rgba(0, 65, 62, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 82px; }
+    body { margin: 0; font-family: "DM Sans", sans-serif; color: var(--ink); background: var(--paper); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .navbar {
+      position: absolute; top: 0; left: 0; width: 100%; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px;
+      padding: 25px clamp(20px, 5vw, 76px); color: #fff;
+    }
+    .brand { font-family: "Manrope", sans-serif; font-weight: 800; font-size: 1.45rem; letter-spacing: .22em; }
+    .nav-actions { display: flex; align-items: center; gap: 18px; }
+    .login-btn {
+      border: 1px solid rgba(255,255,255,.78); color: #fff; background: rgba(255,255,255,.12);
+      padding: 11px 17px; border-radius: 999px; font-weight: 600; cursor: pointer;
+      backdrop-filter: blur(8px); transition: .25s ease;
+    }
+    .login-btn:hover { color: var(--teal-deep); background: #fff; }
+    .menu-btn { width: 44px; height: 44px; border: 0; background: transparent; color: #fff; cursor: pointer; display: grid; place-items: center; }
+    .menu-btn svg { width: 28px; height: 28px; }
+    .hero {
+      position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden;
+      color: #fff; text-align: center; isolation: isolate; padding: 125px 22px 75px;
+      background: linear-gradient(135deg, #006e68, #008c88 55%, #004e4b);
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; z-index: -2;
+      background:
+        linear-gradient(115deg, rgba(0, 74, 70, .82), rgba(0, 140, 136, .68) 52%, rgba(0, 61, 58, .78)),
+        url("assets/college-background.jpg") center/cover no-repeat;
+      transform: scale(1.02);
+    }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.04), rgba(0,0,0,.22));
+    }
+    .hero-content { max-width: 1050px; animation: rise-in .9s ease both; }
+    .eyebrow { margin: 0 0 22px; font-size: .76rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.85); }
+    h1 { margin: 0; font-family: "Manrope", sans-serif; font-size: clamp(2.3rem, 6.4vw, 5.7rem); font-weight: 800; line-height: 1.04; letter-spacing: -.055em; text-wrap: balance; }
+    h1 span { display: block; margin-top: 14px; font-size: clamp(1.05rem, 2.3vw, 1.8rem); font-weight: 600; line-height: 1.4; letter-spacing: .12em; }
+    .scroll-cue { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 9px; color: rgba(255,255,255,.84); font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; }
+    .scroll-cue::after { content: ""; width: 1px; height: 35px; background: rgba(255,255,255,.7); animation: scroll-line 1.5s ease-in-out infinite; transform-origin: top; }
+    .section { padding: clamp(72px, 9vw, 120px) clamp(22px, 7vw, 110px); }
+    .section-inner { max-width: 1180px; margin: auto; }
+    .section-kicker { margin: 0 0 13px; color: var(--teal); font-size: .76rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+    h2 { margin: 0 0 25px; font-family: "Manrope", sans-serif; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.1; letter-spacing: -.045em; }
+    .section-copy { max-width: 900px; color: var(--muted); font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.9; }
+    .about-layout { display: grid; grid-template-columns: .65fr 1.35fr; gap: clamp(30px, 6vw, 88px); align-items: start; }
+    .about-mark { color: var(--teal); font-family: "Manrope", sans-serif; font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 800; letter-spacing: -.09em; line-height: .9; }
+    .about-mark small { display: block; margin-top: 18px; font-size: .78rem; letter-spacing: .14em; line-height: 1.6; }
+    .vision { color: #fff; background: var(--teal); position: relative; overflow: hidden; }
+    .vision .section-kicker { color: rgba(255,255,255,.75); }
+    .vision h2 { max-width: 800px; }
+    .vision .section-copy { color: rgba(255,255,255,.92); }
+    .vision::after { content: "VISION"; position: absolute; right: -20px; bottom: -65px; font: 800 clamp(6rem, 20vw, 17rem)/1 "Manrope", sans-serif; color: rgba(255,255,255,.055); pointer-events: none; }
+    .mission-intro { max-width: 950px; margin-bottom: 42px; }
+    .programs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .program-pill { display: inline-flex; padding: 10px 14px; border-radius: 999px; background: #E1F2F0; color: var(--teal-deep); font-weight: 700; font-size: .85rem; }
+    .objectives { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .objective { display: flex; gap: 18px; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: #fff; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .objective:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(0,140,136,.45); }
+    .number { flex: 0 0 42px; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: var(--teal); color: #fff; font-family: "Manrope", sans-serif; font-weight: 800; }
+    .objective h3 { margin: 2px 0 8px; font: 700 1.04rem/1.4 "Manrope", sans-serif; }
+    .objective p { margin: 0; color: var(--muted); line-height: 1.75; font-size: .94rem; }
+    .ultimate { margin-top: 30px; padding: 30px; border-radius: 20px; background: var(--teal); color: #fff; }
+    .ultimate h3 { margin: 0 0 10px; font: 800 1.2rem "Manrope", sans-serif; }
+    .ultimate p { margin: 0; font-size: 1.05rem; line-height: 1.8; }
+    .departments { background: var(--soft); }
+    .dept-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .dept-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .3s ease, box-shadow .3s ease; }
+    .dept-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .dept-image { min-height: 170px; display: grid; place-items: center; background: linear-gradient(135deg, #D9F0ED, #A7D9D4); color: var(--teal-deep); }
+    .dept-image svg { width: 58px; height: 58px; }
+    .dept-content { padding: 25px; }
+    .dept-content .dept-no { color: var(--teal); font-size: .72rem; font-weight: 800; letter-spacing: .16em; }
+    .dept-content h3 { margin: 10px 0 12px; font: 750 1.2rem/1.4 "Manrope", sans-serif; }
+    .dept-content p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.8; }
+    .projects { background: #fff; }
+    .projects-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
+    .projects-head .section-copy { margin: 0; max-width: 620px; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .project-card { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #fff; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .project-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: rgba(0,140,136,.45); }
+    .project-cover { min-height: 190px; display: grid; place-items: center; color: var(--teal-deep); background: linear-gradient(135deg, #D9F0ED, #A7D9D4); }
+    .project-cover svg { width: 54px; height: 54px; }
+    .project-content { padding: 24px; }
+    .project-tag { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; background: #E1F2F0; color: var(--teal-deep); font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .project-content h3 { margin: 13px 0 9px; font: 750 1.18rem/1.4 "Manrope", sans-serif; }
+    .project-content p { margin: 0; color: var(--muted); font-size: .94rem; line-height: 1.75; }
+    .project-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: var(--teal-dark); font-weight: 800; font-size: .9rem; }
+    .project-link[aria-disabled="true"] { color: var(--muted); cursor: default; }
+    .login-notice strong { display: block; margin-bottom: 4px; }
+    .menu-admin-link { display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; padding: 12px 20px; border: 1px solid rgba(255,255,255,.48); border-radius: 999px; font-size: clamp(1rem, 2vw, 1.25rem) !important; }
+    .menu-admin-link:hover { background: rgba(255,255,255,.1); }
+    footer { padding: 30px 22px; text-align: center; background: #073F3C; color: rgba(255,255,255,.8); font-size: .88rem; }
+    footer strong { color: #fff; letter-spacing: .12em; }
+    .menu-overlay { position: fixed; inset: 0; z-index: 20; background: rgba(0, 27, 25, .97); color: #fff; display: grid; place-items: center; padding: 28px; opacity: 0; visibility: hidden; transition: .25s ease; }
+    .menu-overlay.open { opacity: 1; visibility: visible; }
+    .close-menu { position: absolute; top: 23px; right: clamp(20px, 5vw, 76px); width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; color: #fff; background: transparent; font-size: 1.8rem; cursor: pointer; }
+    .menu-links { display: flex; flex-direction: column; gap: 20px; text-align: center; }
+    .menu-links a { font: 700 clamp(1.7rem, 4vw, 3rem) "Manrope", sans-serif; transition: color .2s ease; }
+    .menu-links a:hover { color: #65D2C8; }
+    .login-notice { position: fixed; z-index: 30; inset: auto 18px 18px; max-width: 430px; margin: auto; padding: 16px 18px; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); display: none; line-height: 1.5; }
+    .login-notice.show { display: block; animation: rise-in .25s ease both; }
+    .login-notice button { float: right; margin-left: 10px; border: 0; background: transparent; color: var(--teal); font-weight: 800; cursor: pointer; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @keyframes rise-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scroll-line { 0%,100% { transform: scaleY(.6); opacity: .55; } 50% { transform: scaleY(1); opacity: 1; } }
+    @media (max-width: 850px) {
+      .about-layout { grid-template-columns: 1fr; gap: 32px; }
+      .objectives { grid-template-columns: 1fr; }
+      .dept-grid { grid-template-columns: 1fr; }
+      .project-grid { grid-template-columns: 1fr; }
+      .projects-head { display: block; }
+      .projects-head .section-copy { margin-top: 14px; }
+      .dept-image { min-height: 145px; }
+      .section { padding-top: 76px; padding-bottom: 76px; }
+    }
+    @media (max-width: 480px) {
+      .navbar { padding: 19px 17px; gap: 10px; }
+      .brand { font-size: 1.15rem; letter-spacing: .18em; }
+      .nav-actions { gap: 8px; }
+      .login-btn { padding: 10px 12px; font-size: .78rem; }
+      .menu-btn { width: 38px; height: 38px; }
+      .hero { padding-inline: 18px; }
+      h1 { font-size: clamp(2.15rem, 11vw, 3.4rem); }
+      h1 span { letter-spacing: .06em; }
+      .objective { padding: 19px; gap: 13px; }
+      .number { flex-basis: 36px; width: 36px; height: 36px; }
+      .dept-content { padding: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#home" aria-label="MMSA home">MMSA</a>
+    <div class="nav-actions">
+      <button class="login-btn" id="studentLogin" type="button">Student Login</button>
+      <button class="menu-btn" id="menuOpen" type="button" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h18M7 12h14M3 17h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-label="MMSA introduction">
+      <div class="hero-content">
+        <p class="eyebrow">MMSA · Masrahul Mawahib</p>
+        <h1>MASRAHUL MAWAHIB<span>STUDENTS' ASSOCIATION</span></h1>
+      </div>
+      <a class="scroll-cue" href="#about">Scroll to explore</a>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-inner about-layout reveal">
+        <div>
+          <p class="section-kicker">Who We Are</p>
+          <div class="about-mark">MMSA<small>MASRAHUL MAWAHIB<br>STUDENTS ASSOCIATION</small></div>
+        </div>
+        <div>
+          <h2>About Our Union</h2>
+          <p class="section-copy"><strong>MMSA | Masrahul Mawahib Students Association</strong></p>
+          <p class="section-copy">MMSA is a student organization dedicated to promoting academic excellence, leadership, and holistic development. Guided by Islamic values, the association aims to foster intellectual growth, creativity, and character through academic, literary, cultural, and extracurricular activities.</p>
+          <p class="section-copy">MMSA provides a platform for students to enhance their abilities, develop essential skills, and cultivate a sense of discipline, integrity, unity, and social responsibility. Through its initiatives, the association strives to nurture knowledgeable individuals, responsible leaders, and active contributors to society.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section vision" id="vision">
+      <div class="section-inner reveal">
+        <p class="section-kicker">Our Vision</p>
+        <h2>Inspiring Minds.<br>Shaping Futures.</h2>
+        <p class="section-copy">To illuminate minds with knowledge, nurture hearts with values, and empower a generation of visionary leaders who rise with purpose, lead with integrity, and inspire meaningful change.</p>
+        <p class="section-copy">MMSA aspires to build a future where every student discovers their potential, transforms aspirations into achievements, and contributes to a more enlightened, compassionate, and progressive society, guided by Islamic principles and a lifelong pursuit of excellence.</p>
+      </div>
+    </section>
+
+    <section class="section" id="mission">
+      <div class="section-inner reveal">
+        <p class="section-kicker">Our Mission</p>
+        <h2>Empowering Students.<br>Unlocking Potential.</h2>
+        <div class="mission-intro">
+          <p class="section-copy">MMSA is committed to empowering students through structured skill development and meaningful learning opportunities. Through our flagship initiatives, <strong>ZENITH – Unlocking Potential</strong> and <strong>CIVITAS – Civil Intelligence Programme</strong>, we strive to develop students’ abilities, broaden their knowledge, and prepare them for future challenges.</p>
+          <div class="programs">
+            <span class="program-pill">ZENITH – Unlocking Potential</span>
+            <span class="program-pill">CIVITAS – Civil Intelligence Programme</span>
+          </div>
+        </div>
+        <div class="objectives">
+          <article class="objective"><div class="number">01</div><div><h3>Develop Communication Skills</h3><p>To build confidence in public speaking, improve presentation skills, and help students express their ideas clearly and effectively.</p></div></article>
+          <article class="objective"><div class="number">02</div><div><h3>Nurture Literary Talents</h3><p>To encourage creative and academic writing, strengthen written expression, and provide opportunities for students to develop and publish their work.</p></div></article>
+          <article class="objective"><div class="number">03</div><div><h3>Foster Creativity and Digital Skills</h3><p>To develop students’ abilities in design, digital media, and content creation while encouraging innovation and visual expression.</p></div></article>
+          <article class="objective"><div class="number">04</div><div><h3>Promote Linguistic Excellence</h3><p>To improve language proficiency, strengthen communication, encourage multilingual learning, and develop appreciation for different cultures through language.</p></div></article>
+          <article class="objective"><div class="number">05</div><div><h3>Cultivate Current Affairs Awareness</h3><p>To develop regular newspaper-reading habits, expand general knowledge, and help students understand contemporary issues and events.</p></div></article>
+          <article class="objective"><div class="number">06</div><div><h3>Strengthen Analytical and Competitive Aptitude</h3><p>To enhance critical thinking, problem-solving, and general competency while familiarizing students with competitive examination patterns.</p></div></article>
+          <article class="objective"><div class="number">07</div><div><h3>Inspire Leadership and Teamwork</h3><p>To cultivate confidence, discipline, collaboration, and responsibility, enabling students to take initiative and contribute effectively to collective goals.</p></div></article>
+          <article class="objective"><div class="number">08</div><div><h3>Promote Islamic Values and Responsible Citizenship</h3><p>To nurture integrity, good character, social awareness, and a sense of civic responsibility, inspiring students to become informed and positive contributors to society.</p></div></article>
+        </div>
+        <div class="ultimate">
+          <h3>Our Ultimate Mission</h3>
+          <p>To transform students’ potential into practical skills, knowledge into confidence, and aspirations into meaningful achievements.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section departments" id="departments">
+      <div class="section-inner reveal">
+        <p class="section-kicker">Our Team Structure</p>
+        <h2>Departments</h2>
+        <p class="section-copy" style="margin-bottom:36px">Different teams, one shared purpose: helping students learn, create, and contribute.</p>
+        <div class="dept-grid">
+          <article class="dept-card">
+            <div class="dept-image" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.3 4.7L19.5 9l-3.8 3.7.9 5.3-4.6-2.5-4.6 2.5.9-5.3L4.5 9l5.2-1.3L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 21h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="dept-content"><span class="dept-no">DEPARTMENT 01</span><h3>Fine Arts Department</h3><p>Promotes students’ artistic talents and organizes cultural programmes, arts festivals, and competitions.</p></div>
+          </article>
+          <article class="dept-card">
+            <div class="dept-image" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 6l1.5-3h5L16 6M8 11h8M8 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="dept-content"><span class="dept-no">DEPARTMENT 02</span><h3>Public Relations Department (Media)</h3><p>Manages MMSA’s media presence through social media, poster design, photography, event coverage, and official announcements.</p></div>
+          </article>
+          <article class="dept-card">
+            <div class="dept-image" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 20v-1.2A4.8 4.8 0 0 1 8.3 14h1.4a4.8 4.8 0 0 1 4.8 4.8V20M15 14.5a4 4 0 0 1 5.5 3.7V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="dept-content"><span class="dept-no">DEPARTMENT 03</span><h3>Social Affairs Department</h3><p>Focuses on student welfare, community service, social awareness, and strengthening unity among students.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section projects" id="projects">
+      <div class="section-inner reveal">
+        <p class="section-kicker">Ideas Into Action</p>
+        <div class="projects-head">
+          <div>
+            <h2>Explore Our Projects</h2>
+            <p class="section-copy">Discover the initiatives, creative work, and projects connected with MMSA.</p>
+          </div>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 7h8M8 11h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="project-content"><span class="project-tag">Project 01</span><h3>Project details coming soon</h3><p>This card is ready for an MMSA project name, short description, cover image, and project link.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
+          </article>
+          <article class="project-card">
+            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 15l3-3 2 2 4-5 2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/></svg></div>
+            <div class="project-content"><span class="project-tag">Project 02</span><h3>Project details coming soon</h3><p>Project information and a preview image can be displayed here when the project is ready.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
+          </article>
+          <article class="project-card">
+            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M5 20v-1.5a7 7 0 0 1 14 0V20M3 4h2M19 4h2M12 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="project-content"><span class="project-tag">Project 03</span><h3>Project details coming soon</h3><p>More student projects and MMSA initiatives can be featured in this section.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><strong>MMSA</strong><br>Masrahul Mawahib Students Association</footer>
+
+  <nav class="menu-overlay" id="menuOverlay" aria-hidden="true" aria-label="Main navigation">
+    <button class="close-menu" id="menuClose" type="button" aria-label="Close menu">×</button>
+    <div class="menu-links">
+      <a href="#home">Home</a>
+      <a href="#about">About Our Union</a>
+      <a href="#vision">Our Vision</a>
+      <a href="#mission">Our Mission</a>
+      <a href="#departments">Departments</a>
+      <a href="#projects">Explore Our Projects</a>
+      <a href="#admin-login" class="menu-admin-link" id="adminLogin"><span aria-hidden="true">↗</span> Admin Login</a>
+    </div>
+  </nav>
+
+  <div class="login-notice" id="loginNotice" role="status" aria-live="polite">
+    <button id="noticeClose" type="button" aria-label="Close message">✕</button>
+    <strong id="noticeTitle">Login setup pending</strong>
+    <span id="noticeMessage">The login system has not been connected yet.</span>
+  </div>
+
+  <script>
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuOpen = document.getElementById('menuOpen');
+    const menuClose = document.getElementById('menuClose');
+
+    function setMenu(open) {
+      menuOverlay.classList.toggle('open', open);
+      menuOverlay.setAttribute('aria-hidden', String(!open));
+      menuOpen.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    menuOpen.addEventListener('click', () => setMenu(true));
+    menuClose.addEventListener('click', () => setMenu(false));
+    menuOverlay.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') setMenu(false); });
+
+    const loginNotice = document.getElementById('loginNotice');
+    const noticeTitle = document.getElementById('noticeTitle');
+    const noticeMessage = document.getElementById('noticeMessage');
+    function showLoginNotice(title, message) {
+      noticeTitle.textContent = title;
+      noticeMessage.textContent = message;
+      loginNotice.classList.add('show');
+    }
+    document.getElementById('studentLogin').addEventListener('click', () => {
+      showLoginNotice('Student login not connected yet', 'Student login will be enabled when the authentication system is set up.');
+    });
+    document.getElementById('adminLogin').addEventListener('click', event => {
+      event.preventDefault();
+      setMenu(false);
+      showLoginNotice('Admin login not connected yet', 'The Admin Login menu item is in place. Secure login still needs to be connected to Supabase.');
+    });
+    document.getElementById('noticeClose').addEventListener('click', () => loginNotice.classList.remove('show'));
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
