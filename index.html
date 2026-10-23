@@ -175,6 +175,19 @@
     .admin-project-card p{color:#607171;line-height:1.55;min-height:48px;margin:0 0 18px;font-size:14px}
     .admin-project-card .status{display:inline-block;border-radius:30px;background:#e8f7ed;color:#267345;padding:5px 9px;font-size:12px;font-weight:700;margin-bottom:12px}
     .admin-dash-foot{margin-top:22px;color:#718080;font-size:12px;line-height:1.5}
+    .project-editor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .project-editor{background:#fff;border:1px solid #dce7e6;border-radius:15px;padding:18px;min-width:0}
+    .project-editor h3{margin:0 0 14px;font-size:18px}
+    .project-editor label{display:block;font-weight:700;font-size:13px;margin:10px 0 5px;color:#31504f}
+    .project-editor input,.project-editor textarea{display:block;width:100%;padding:10px;border:1px solid #cedddb;border-radius:8px;font:inherit;background:white;color:#172a2a}
+    .project-editor textarea{min-height:85px;resize:vertical}
+    .project-editor .published-row{display:flex;align-items:center;gap:8px;margin:12px 0}
+    .project-editor .published-row input{width:auto}
+    .project-editor button{margin-top:8px}
+    .project-cover img{width:100%;height:190px;object-fit:cover;display:block}
+    .project-card a.project-link{color:var(--teal-dark)}
+    .project-card .project-cover img{width:100%;height:100%;min-height:190px;object-fit:cover}
+    @media(max-width:520px){.project-editor-grid{grid-template-columns:1fr}}
     @media(max-width:520px){#adminDashboard{padding:20px 13px}.admin-dash-top{align-items:flex-start;flex-direction:column}}
 
   </style>
@@ -282,20 +295,7 @@
             <p class="section-copy">Discover the initiatives, creative work, and projects connected with MMSA.</p>
           </div>
         </div>
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 7h8M8 11h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-            <div class="project-content"><span class="project-tag">Project 01</span><h3>Project details coming soon</h3><p>This card is ready for an MMSA project name, short description, cover image, and project link.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
-          </article>
-          <article class="project-card">
-            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 15l3-3 2 2 4-5 2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/></svg></div>
-            <div class="project-content"><span class="project-tag">Project 02</span><h3>Project details coming soon</h3><p>Project information and a preview image can be displayed here when the project is ready.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
-          </article>
-          <article class="project-card">
-            <div class="project-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M5 20v-1.5a7 7 0 0 1 14 0V20M3 4h2M19 4h2M12 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-            <div class="project-content"><span class="project-tag">Project 03</span><h3>Project details coming soon</h3><p>More student projects and MMSA initiatives can be featured in this section.</p><span class="project-link" aria-disabled="true">Details will be added soon</span></div>
-          </article>
-        </div>
+        <div class="project-grid" id="publicProjectGrid" aria-live="polite"><p class="section-copy">Loading MMSA projects…</p></div>
       </div>
     </section>
   </main>
@@ -336,12 +336,14 @@
         <div><p class="section-kicker">MMSA ADMIN</p><h2>Project Control</h2><p>Manage the website project and its backend tools.</p></div>
         <div class="admin-dash-actions"><button class="admin-dash-btn secondary" id="backToWebsite" type="button">View Website</button><button class="admin-dash-btn" id="adminLogout" type="button">Log out</button></div>
       </header>
-      <div class="admin-project-grid">
-        <article class="admin-project-card"><div class="admin-project-icon">🌐</div><span class="status">Hosting</span><h3>Vercel Project</h3><p>Open your hosting dashboard to inspect deployments, domain settings, and project configuration.</p><a class="admin-dash-btn" href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer">Open Vercel ↗</a></article>
-        <article class="admin-project-card"><div class="admin-project-icon">🗄️</div><span class="status">Backend</span><h3>Supabase Project</h3><p>Open the MMSA backend to manage authentication, database settings, and project health.</p><a class="admin-dash-btn" href="https://supabase.com/dashboard/project/tqxflzkppzolxehpkmto" target="_blank" rel="noopener noreferrer">Open Supabase ↗</a></article>
-        <article class="admin-project-card"><div class="admin-project-icon">💻</div><span class="status">Source code</span><h3>GitHub Repository</h3><p>Open the website source code to review files, commit changes, and manage the repository.</p><a class="admin-dash-btn" href="https://github.com/fayizcp75/mmsa-website" target="_blank" rel="noopener noreferrer">Open GitHub ↗</a></article>
+      <div class="admin-project-grid" style="grid-template-columns:1fr;margin-bottom:18px">
+        <article class="admin-project-card"><div class="admin-project-icon">🗂️</div><span class="status">Website content</span><h3>Explore Our Projects</h3><p>Edit the three project cards shown on the public MMSA website. Changes are saved to Supabase.</p><button class="admin-dash-btn" id="loadProjectControl" type="button">Manage Projects ↓</button></article>
       </div>
-      <p class="admin-dash-foot">These cards open the official control panels. They do not directly change hosting or database settings from this page. Access to each service depends on your account permissions.</p>
+      <div id="projectControlPanel" hidden>
+        <div id="projectEditorList" class="project-editor-grid"></div>
+        <p id="projectControlStatus" role="status" class="admin-dash-foot"></p>
+      </div>
+      <p class="admin-dash-foot">Only the Project Control card is shown here. Project edits are saved in Supabase and displayed in Explore Our Projects.</p>
     </div>
   </section>
 
@@ -428,6 +430,7 @@
         loginNotice.classList.remove('show');
         adminDashboard.classList.add('visible');
         document.body.style.overflow = 'hidden';
+        await loadProjectEditors();
       } catch (error) {
         noticeMessage.textContent = 'Login failed. Check your email and password, and confirm the Supabase admin account is configured.';
       } finally {
@@ -446,6 +449,79 @@
       showAdminLogin();
       noticeMessage.textContent = 'You have been logged out.';
     });
+
+
+    const publicProjectGrid = document.getElementById('publicProjectGrid');
+    const projectControlPanel = document.getElementById('projectControlPanel');
+    const projectEditorList = document.getElementById('projectEditorList');
+    const projectControlStatus = document.getElementById('projectControlStatus');
+    const projectIcons = [
+      '<svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7h8M8 11h8" stroke="currentColor" stroke-width="1.5"/></svg>',
+      '<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 15l3-3 2 2 4-5 2 2" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/></svg>',
+      '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M5 20v-1.5a7 7 0 0 1 14 0V20" stroke="currentColor" stroke-width="1.5"/></svg>'
+    ];
+    function safeUrl(value) {
+      try { const u = new URL(value); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; }
+      catch { return ''; }
+    }
+    function renderPublicProjects(projects) {
+      const visible = (projects || []).filter(p => p.is_published).sort((a,b) => a.project_number-b.project_number);
+      if (!visible.length) { publicProjectGrid.innerHTML = '<p class="section-copy">No projects are published yet.</p>'; return; }
+      publicProjectGrid.innerHTML = visible.map(p => {
+        const image = safeUrl(p.image_url);
+        const link = safeUrl(p.project_url);
+        const cover = image ? `<img src="${image.replace(/"/g,'&quot;')}" alt="${String(p.title).replace(/"/g,'&quot;')}" loading="lazy">` : projectIcons[p.project_number-1];
+        const action = link ? `<a class="project-link" href="${link.replace(/"/g,'&quot;')}" target="_blank" rel="noopener noreferrer">View project ↗</a>` : '<span class="project-link" aria-disabled="true">Details will be added soon</span>';
+        return `<article class="project-card"><div class="project-cover">${cover}</div><div class="project-content"><span class="project-tag">Project ${String(p.project_number).padStart(2,'0')}</span><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.description)}</p>${action}</div></article>`;
+      }).join('');
+    }
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    async function loadPublicProjects() {
+      const { data, error } = await supabaseClient.from('mmsa_projects').select('*').eq('is_published', true).order('project_number');
+      if (error) { publicProjectGrid.innerHTML = '<p class="section-copy">Projects are temporarily unavailable. Please try again later.</p>'; return; }
+      renderPublicProjects(data);
+    }
+    async function loadProjectEditors() {
+      projectControlStatus.textContent = 'Loading project details…';
+      const { data, error } = await supabaseClient.from('mmsa_projects').select('*').order('project_number');
+      if (error) { projectControlStatus.textContent = 'Could not load projects: ' + error.message; return; }
+      projectEditorList.innerHTML = data.map(p => `<article class="project-editor" data-project-id="${p.id}">
+        <h3>Project ${String(p.project_number).padStart(2,'0')}</h3>
+        <label for="pt-${p.id}">Project name / title</label><input id="pt-${p.id}" data-field="title" maxlength="120" value="${escapeHtml(p.title)}">
+        <label for="pd-${p.id}">Description</label><textarea id="pd-${p.id}" data-field="description" maxlength="1000">${escapeHtml(p.description)}</textarea>
+        <label for="pi-${p.id}">Cover image URL (optional)</label><input id="pi-${p.id}" data-field="image_url" type="url" placeholder="https://…" value="${escapeHtml(p.image_url || '')}">
+        <label for="pu-${p.id}">Project link (optional)</label><input id="pu-${p.id}" data-field="project_url" type="url" placeholder="https://…" value="${escapeHtml(p.project_url || '')}">
+        <label class="published-row"><input data-field="is_published" type="checkbox" ${p.is_published ? 'checked' : ''}> Show this card on website</label>
+        <button class="admin-dash-btn" type="button" data-save-project="${p.id}">Save changes</button>
+      </article>`).join('');
+      projectControlStatus.textContent = 'Edit a card and press Save changes. Public website cards update from the saved database data.';
+    }
+    document.getElementById('loadProjectControl').addEventListener('click', async () => {
+      projectControlPanel.hidden = !projectControlPanel.hidden;
+      if (!projectControlPanel.hidden) await loadProjectEditors();
+    });
+    projectEditorList.addEventListener('click', async event => {
+      const button = event.target.closest('[data-save-project]');
+      if (!button) return;
+      const card = button.closest('[data-project-id]');
+      const value = field => card.querySelector(`[data-field="${field}"]`);
+      const title = value('title').value.trim();
+      const description = value('description').value.trim();
+      if (!title || !description) { projectControlStatus.textContent = 'Title and description are required.'; return; }
+      const image = value('image_url').value.trim();
+      const url = value('project_url').value.trim();
+      if ((image && !safeUrl(image)) || (url && !safeUrl(url))) { projectControlStatus.textContent = 'Please use valid http:// or https:// URLs for image and project link.'; return; }
+      const payload = { title, description, image_url: image, project_url: url, is_published: value('is_published').checked, updated_at: new Date().toISOString() };
+      button.disabled = true; button.textContent = 'Saving…'; projectControlStatus.textContent = '';
+      const { error } = await supabaseClient.from('mmsa_projects').update(payload).eq('id', Number(card.dataset.projectId));
+      button.disabled = false; button.textContent = 'Save changes';
+      if (error) { projectControlStatus.textContent = 'Save failed: ' + error.message; return; }
+      projectControlStatus.textContent = 'Saved successfully!';
+      await loadPublicProjects();
+    });
+    loadPublicProjects();
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
