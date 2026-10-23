@@ -296,12 +296,22 @@
     </div>
   </nav>
 
-  <div class="login-notice" id="loginNotice" role="status" aria-live="polite">
-    <button id="noticeClose" type="button" aria-label="Close message">✕</button>
-    <strong id="noticeTitle">Login setup pending</strong>
-    <span id="noticeMessage">The login system has not been connected yet.</span>
+  <div class="login-notice" id="loginNotice" role="dialog" aria-modal="false" aria-labelledby="noticeTitle">
+    <button id="noticeClose" type="button" aria-label="Close login panel">✕</button>
+    <strong id="noticeTitle">MMSA Admin Login</strong>
+    <form id="adminLoginForm">
+      <label for="adminEmail">Admin email</label>
+      <input id="adminEmail" type="email" autocomplete="username" placeholder="Admin email" required
+        style="display:block;width:100%;padding:11px;margin:8px 0 12px;border:1px solid var(--line);border-radius:8px;">
+      <label for="adminPassword">Password</label>
+      <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Password" required
+        style="display:block;width:100%;padding:11px;margin:8px 0 12px;border:1px solid var(--line);border-radius:8px;">
+      <button id="adminSubmit" type="submit" style="float:none;margin:0;padding:10px 16px;background:var(--teal);color:white;border-radius:8px;">Login</button>
+      <p id="noticeMessage" style="display:block;margin:12px 0 0;"></p>
+    </form>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const menuOverlay = document.getElementById('menuOverlay');
     const menuOpen = document.getElementById('menuOpen');
@@ -319,22 +329,74 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') setMenu(false); });
 
     const loginNotice = document.getElementById('loginNotice');
-    const noticeTitle = document.getElementById('noticeTitle');
     const noticeMessage = document.getElementById('noticeMessage');
-    function showLoginNotice(title, message) {
-      noticeTitle.textContent = title;
-      noticeMessage.textContent = message;
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const adminSubmit = document.getElementById('adminSubmit');
+
+    // Supabase project public/publishable key. Never place a service_role key in frontend code.
+    const SUPABASE_URL = 'https://tqxflzkppzolxehpkmto.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_c0fV9q0mYW6Tm4jpvazRvg_1pafftv3';
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    function showAdminLogin() {
+      noticeMessage.textContent = '';
       loginNotice.classList.add('show');
+      document.getElementById('adminEmail').focus();
     }
+
     document.getElementById('studentLogin').addEventListener('click', () => {
-      showLoginNotice('Student login not connected yet', 'Student login will be enabled when the authentication system is set up.');
+      showAdminLogin();
+      noticeMessage.textContent = 'Student login has not been configured yet. Use the Admin Login menu for administrator access.';
     });
+
     document.getElementById('adminLogin').addEventListener('click', event => {
       event.preventDefault();
       setMenu(false);
-      showLoginNotice('Admin login not connected yet', 'The Admin Login menu item is in place. Secure login still needs to be connected to Supabase.');
+      showAdminLogin();
     });
-    document.getElementById('noticeClose').addEventListener('click', () => loginNotice.classList.remove('show'));
+
+    document.getElementById('noticeClose').addEventListener('click', () => {
+      loginNotice.classList.remove('show');
+      noticeMessage.textContent = '';
+    });
+
+    adminLoginForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      noticeMessage.textContent = 'Checking credentials…';
+      adminSubmit.disabled = true;
+
+      const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+      const password = document.getElementById('adminPassword').value;
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+
+        // This client-side check helps gate the UI, but database access must also be
+        // protected with server-side authorization and Supabase RLS policies.
+        const isAuthorizedAdmin =
+          data.user &&
+          data.user.email &&
+          data.user.email.toLowerCase() === 'kkhmunion@gmail.com' &&
+          data.user.app_metadata &&
+          data.user.app_metadata.role === 'admin';
+
+        if (!isAuthorizedAdmin) {
+          await supabaseClient.auth.signOut();
+          noticeMessage.textContent = 'This account is not authorized as an MMSA admin.';
+          return;
+        }
+
+        noticeMessage.textContent = 'Admin authentication successful. The admin dashboard has not been added yet.';
+      } catch (error) {
+        noticeMessage.textContent = 'Login failed. Check your email and password, and confirm the Supabase admin account is configured.';
+      } finally {
+        adminSubmit.disabled = false;
+      }
+    });
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
