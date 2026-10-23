@@ -23,15 +23,24 @@
       --shadow: 0 18px 55px rgba(0, 65, 62, .10);
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 82px; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
     body { margin: 0; font-family: "DM Sans", sans-serif; color: var(--ink); background: var(--paper); }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; }
     .navbar {
-      position: absolute; top: 0; left: 0; width: 100%; z-index: 10;
+      position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+      width: min( calc(100% - 32px), 1320px); z-index: 100;
       display: flex; align-items: center; justify-content: space-between; gap: 18px;
-      padding: 25px clamp(20px, 5vw, 76px); color: #fff;
+      padding: 14px clamp(18px, 3vw, 34px); color: #fff;
+      background: rgba(0, 65, 62, .38);
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 20px;
+      -webkit-backdrop-filter: blur(18px) saturate(145%);
+      backdrop-filter: blur(18px) saturate(145%);
+      box-shadow: 0 10px 35px rgba(0, 35, 33, .15);
+      transition: background .25s ease, box-shadow .25s ease;
     }
+    .navbar:hover { background: rgba(0, 65, 62, .52); box-shadow: 0 14px 40px rgba(0, 35, 33, .2); }
     .brand { font-family: "Manrope", sans-serif; font-weight: 800; font-size: 1.45rem; letter-spacing: .22em; }
     .nav-actions { display: flex; align-items: center; gap: 18px; }
     .login-btn {
@@ -118,12 +127,18 @@
     .menu-admin-link:hover { background: rgba(255,255,255,.1); }
     footer { padding: 30px 22px; text-align: center; background: #073F3C; color: rgba(255,255,255,.8); font-size: .88rem; }
     footer strong { color: #fff; letter-spacing: .12em; }
-    .menu-overlay { position: fixed; inset: 0; z-index: 20; background: rgba(0, 27, 25, .97); color: #fff; display: grid; place-items: center; padding: 28px; opacity: 0; visibility: hidden; transition: .25s ease; }
-    .menu-overlay.open { opacity: 1; visibility: visible; }
-    .close-menu { position: absolute; top: 23px; right: clamp(20px, 5vw, 76px); width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; color: #fff; background: transparent; font-size: 1.8rem; cursor: pointer; }
-    .menu-links { display: flex; flex-direction: column; gap: 20px; text-align: center; }
-    .menu-links a { font: 700 clamp(1.7rem, 4vw, 3rem) "Manrope", sans-serif; transition: color .2s ease; }
-    .menu-links a:hover { color: #65D2C8; }
+    .menu-overlay { position: fixed; inset: 0; z-index: 1100; display: block; padding: 0; color: #fff; background: rgba(0, 20, 19, .42); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s ease, visibility .28s ease; }
+    .menu-overlay::before { content: ""; position: absolute; top: 12px; right: 12px; bottom: 12px; width: min(410px, calc(100vw - 24px)); border: 1px solid rgba(255,255,255,.24); border-radius: 28px; background: linear-gradient(145deg, rgba(8,93,87,.88), rgba(2,39,38,.82)); box-shadow: -18px 0 55px rgba(0,20,19,.25), inset 0 1px 0 rgba(255,255,255,.15); -webkit-backdrop-filter: blur(28px) saturate(150%); backdrop-filter: blur(28px) saturate(150%); transform: translateX(calc(100% + 28px)); transition: transform .38s cubic-bezier(.22,.8,.25,1); }
+    .menu-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .menu-overlay.open::before { transform: translateX(0); }
+    .close-menu { position: absolute; top: 30px; right: 30px; z-index: 2; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.32); border-radius: 15px; color: #fff; background: rgba(255,255,255,.1); font-size: 1.8rem; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+    .close-menu:hover { background: rgba(255,255,255,.2); transform: rotate(90deg); }
+    .menu-links { position: absolute; top: 96px; right: 12px; bottom: 12px; z-index: 1; width: min(410px, calc(100vw - 24px)); box-sizing: border-box; display: flex; flex-direction: column; align-items: stretch; gap: 7px; overflow-y: auto; padding: 18px 26px 28px; }
+    .menu-links::before { content: "MMSA"; display: block; margin: 0 0 14px; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.17); color: rgba(255,255,255,.7); font: 800 .76rem "Manrope", sans-serif; letter-spacing: .28em; }
+    .menu-links a { display: block; padding: 14px 15px; border: 1px solid transparent; border-radius: 14px; color: rgba(255,255,255,.94); font: 650 1.05rem/1.35 "Manrope", sans-serif; text-align: left; transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease; }
+    .menu-links a:hover { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.13); transform: translateX(-3px); }
+    .menu-admin-link { margin-top: auto; }
+    @media (max-width: 480px) { .menu-overlay::before { top: 8px; right: 8px; bottom: 8px; width: min(370px, calc(100vw - 16px)); border-radius: 24px; } .menu-links { top: 82px; right: 8px; bottom: 8px; width: min(370px, calc(100vw - 16px)); padding: 14px 18px 22px; } .close-menu { top: 22px; right: 22px; } }
     .login-notice { position: fixed; z-index: 30; inset: auto 18px 18px; max-width: 430px; margin: auto; padding: 16px 18px; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); display: none; line-height: 1.5; }
     .login-notice.show { display: block; animation: rise-in .25s ease both; }
     .login-notice button { float: right; margin-left: 10px; border: 0; background: transparent; color: var(--teal); font-weight: 800; cursor: pointer; }
@@ -142,7 +157,7 @@
       .section { padding-top: 76px; padding-bottom: 76px; }
     }
     @media (max-width: 480px) {
-      .navbar { padding: 19px 17px; gap: 10px; }
+      .navbar { top: 9px; width: calc(100% - 18px); padding: 12px 13px; gap: 10px; border-radius: 16px; }
       .brand { font-size: 1.15rem; letter-spacing: .18em; }
       .nav-actions { gap: 8px; }
       .login-btn { padding: 10px 12px; font-size: .78rem; }
@@ -362,6 +377,7 @@
     menuOpen.addEventListener('click', () => setMenu(true));
     menuClose.addEventListener('click', () => setMenu(false));
     menuOverlay.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    menuOverlay.addEventListener('click', event => { if (event.target === menuOverlay) setMenu(false); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape') setMenu(false); });
 
     const loginNotice = document.getElementById('loginNotice');
